@@ -18,6 +18,7 @@ images = []
 os.makedirs("images")
 # Retrieve all documents from collection
 documents = collection.find()
+print(type(documents))
 for doc in documents:
     name = doc['Firstname']
     image_buffer = doc['picture']
@@ -97,11 +98,21 @@ video_capture.release()
 cv2.destroyAllWindows()
 students  = list(set(images))
 # Release handle to the webcam
+documents=collection.find()
+for doc in documents:
+    #name = doc['Firstname']
+    tot = doc['total'] +1
+    print("hello")
+    id = doc['_id']
+    result=collection.find_one_and_update({'_id':id},{'$set':{'total':tot}},return_document=True)
+    print(result)
+
+documents=collection.find()
 for doc in documents:
     name = doc['Firstname']
-    tot = doc['total'] +1
+    #tot = doc['total'] +1
     id = doc['_id']
-    collection.find_one_and_update({'_id':id},{'$set':{'total':tot}},return_document=True)
+    #collection.find_one_and_update({'_id':id},{'$set':{'total':tot}},return_document=True)
     if name in students:
         pr = doc['present'] + 1
         collection.find_one_and_update({'_id':id},{'$set':{'present':pr}},return_document=True)
